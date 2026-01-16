@@ -28,8 +28,6 @@
   },
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "^4.0.0",
-    "@angular-devkit/build-angular": "^18.0.0",
-    "@angular/cli": "^18.0.0",
     "@angular/compiler-cli": "^18.0.0",
     "@types/node": "^18.0.0",
     "autoprefixer": "^10.4.19",
