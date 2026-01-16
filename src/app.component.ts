@@ -54,7 +54,7 @@ import { IconComponent } from './components/ui/icon.component';
                 <p class="font-mono text-lg text-gray-200 tracking-wider mb-2">
                   {{ uiConfig().generatingTest }}
                 </p>
-                <p class="text-xs text-gray-500 font-mono uppercase">Connecting to NeuroMetric AI Core</p>
+                <p class="text-xs text-gray-500 font-mono uppercase">Initializing Evaluation Protocol</p>
               </div>
             </div>
           }
@@ -109,10 +109,10 @@ import { IconComponent } from './components/ui/icon.component';
                 <app-icon name="shield-alert" class="w-16 h-16 mx-auto text-red-400 mb-6"></app-icon>
                 <h2 class="text-2xl font-bold text-white mb-3">{{ uiConfig().errorTitle }}</h2>
                 <p class="text-red-200/80 mb-6 text-sm">{{ uiConfig().errorDesc }}</p>
-                <a href="https://docs.netlify.com/environment-variables/get-started/" target="_blank" rel="noopener noreferrer" 
+                <button (click)="resetApp()"
                    class="inline-block bg-gray-200 text-black px-6 py-3 font-bold font-mono text-sm uppercase tracking-wider rounded-sm hover:bg-white transition-all">
-                  {{ uiConfig().errorAction }}
-                </a>
+                  RETRY SYSTEM
+                </button>
               </div>
             </div>
           }
@@ -178,6 +178,7 @@ import { IconComponent } from './components/ui/icon.component';
 export class AppComponent {
   state = signal<AppState>('intro');
   
+  // Note: Keeping name GeminiService to avoid wide refactor, but it is now offline-only
   geminiService = inject(GeminiService);
   langService = inject(LanguageService);
   
@@ -201,7 +202,10 @@ export class AppComponent {
 
     } catch (e) {
       console.error('Generation failed', e);
-      this.resetApp(); 
+      // Fallback to English offline if specific lang fails somehow
+      const q = await this.geminiService.generateTest('en');
+      this.questions.set(q);
+      this.state.set('test');
     }
   }
 
@@ -272,7 +276,6 @@ export class AppComponent {
   }
 
   resetApp() {
-    if(this.state() === 'error') return;
     this.questions.set([]);
     this.result.set(null);
     this.state.set('intro');

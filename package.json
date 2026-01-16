@@ -1,7 +1,7 @@
 {
   "name": "neuro-metric",
   "version": "1.0.0",
-  "description": "A global, avant-garde IQ testing platform powered by Gemini AI.",
+  "description": "A global, avant-garde IQ testing platform.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -18,10 +18,9 @@
     "@angular/forms": "^18.0.0",
     "@angular/platform-browser": "^18.0.0",
     "@angular/router": "^18.0.0",
-    "@google/genai": "^0.1.0",
+    "@google/genai": "^0.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3",
     "@angular/build": "^18.0.0",
     "@angular/cli": "^18.0.0",
     "@angular/compiler-cli": "^18.0.0",

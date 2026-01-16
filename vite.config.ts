@@ -16,4 +16,8 @@ export default defineConfig({
   resolve: {
     mainFields: ['module'],
   },
+  define: {
+    // Expose the API key to the client-side code
+    'process.env.API_KEY': JSON.stringify(process.env['API_KEY'] || ''),
+  }
 });

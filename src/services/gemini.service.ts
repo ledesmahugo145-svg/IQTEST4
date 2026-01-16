@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+import { GoogleGenAI, Type } from "@google/genai";
 import { Question, LanguageCode } from '../types';
+
+declare var process: { env: { API_KEY: string } };
 
 @Injectable({
   providedIn: 'root'
@@ -7,48 +10,129 @@ import { Question, LanguageCode } from '../types';
 export class GeminiService {
   private readonly HISTORY_KEY = 'neurometric_seen_ids';
   private seenQuestionIds: Set<number> = new Set();
+  private ai: GoogleGenAI;
   
   constructor() {
     this.loadHistory();
+    // API_KEY is injected by Vite at build time via define
+    this.ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   }
 
   // --- PUBLIC METHODS ---
 
   async generateTest(language: LanguageCode): Promise<Question[]> {
-    console.log(`NeuroMetric: Serving offline test for [${language}].`);
-    // Short delay for UX realism
-    await new Promise(resolve => setTimeout(resolve, 600));
-    return this.generateQuestionsOffline(language);
+    if (!process.env.API_KEY) {
+      console.warn('Neurometric System: No API Key detected. Engaging Offline Protocol.');
+      return this.generateQuestionsOffline(language);
+    }
+
+    const langMap: Record<string, string> = {
+      en: 'English', zh: 'Chinese', es: 'Spanish', fr: 'French', 
+      de: 'German', ja: 'Japanese', hi: 'Hindi', ar: 'Arabic', 
+      pt: 'Portuguese', ru: 'Russian'
+    };
+    const langName = langMap[language] || 'English';
+
+    const prompt = `
+      Create a unique, high-IQ cognitive assessment with exactly 10 questions in ${langName}.
+      
+      Requirements:
+      1. Difficulty: progressively harder (IQ 100 to 145 range).
+      2. Categories: Balanced mix of 'logic', 'math', 'spatial', 'verbal'.
+      3. Options: Exactly 4 distinct options per question.
+      4. Format: Strictly JSON.
+
+      This is for a serious psychometric evaluation. Questions must be solvable but challenging.
+    `;
+
+    try {
+      const response = await this.ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                text: { type: Type.STRING, description: "The question text" },
+                options: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Array of 4 options" },
+                correctIndex: { type: Type.INTEGER, description: "Zero-based index of correct option (0-3)" },
+                category: { type: Type.STRING, enum: ['logic', 'math', 'spatial', 'verbal'] }
+              },
+              required: ['text', 'options', 'correctIndex', 'category']
+            }
+          }
+        }
+      });
+
+      if (response.text) {
+        const rawQuestions = JSON.parse(response.text);
+        
+        // Map to internal structure and assign dynamic IDs
+        return rawQuestions.map((q: any, index: number) => ({
+          id: index + 1,
+          text: q.text,
+          options: q.options,
+          correctIndex: q.correctIndex,
+          category: q.category
+        }));
+      }
+      
+      throw new Error('Empty AI response');
+
+    } catch (e) {
+      console.error('Neurometric System: AI Generation Failed. Fallback initiated.', e);
+      return this.generateQuestionsOffline(language);
+    }
   }
 
   async generateAnalysis(iq: number, language: LanguageCode, validity: string): Promise<string> {
-    return this.generateAnalysisOffline(iq, language, validity);
+    if (!process.env.API_KEY) {
+      return this.generateAnalysisOffline(iq, language, validity);
+    }
+
+    const langMap: Record<string, string> = {
+      en: 'English', zh: 'Chinese', es: 'Spanish', fr: 'French', 
+      de: 'German', ja: 'Japanese', hi: 'Hindi', ar: 'Arabic', 
+      pt: 'Portuguese', ru: 'Russian'
+    };
+    const langName = langMap[language] || 'English';
+
+    const prompt = `
+      Act as a clinical psychologist. Provide a brief, professional cognitive assessment summary (approx 40-50 words) for a subject with:
+      - Estimated IQ: ${iq} (Scale: 60-160, Mean: 100)
+      - Validity Status: ${validity}
+      - Language: ${langName}
+      
+      Tone: Scientific, objective, encouraging but realistic.
+      Focus: Pattern recognition capability, fluid intelligence potential, and processing efficacy.
+      Constraint: Do not explicitly mention 'AI' or 'ChatGPT'. Sound like a medical report.
+    `;
+
+    try {
+      const response = await this.ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt
+      });
+      return response.text || this.generateAnalysisOffline(iq, language, validity);
+    } catch (e) {
+      return this.generateAnalysisOffline(iq, language, validity);
+    }
   }
 
   // --- OFFLINE/FALLBACK IMPLEMENTATION ---
 
   private async generateQuestionsOffline(language: LanguageCode): Promise<Question[]> {
-    // Fallback to English ONLY if the specific language key is strictly missing
+    // Artificial delay to mimic computation
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
     let rawQuestions = this.offlineQuestionBank[language] || this.offlineQuestionBank['en'];
     
-    // Filter out seen questions (if possible)
-    const unseen = rawQuestions.filter(q => !this.seenQuestionIds.has(q.id));
-    const seen = rawQuestions.filter(q => this.seenQuestionIds.has(q.id));
-
     // Shuffle
-    const shuffledUnseen = [...unseen].sort(() => 0.5 - Math.random());
-    const shuffledSeen = [...seen].sort(() => 0.5 - Math.random());
-
-    // Select 10
-    const selected: Question[] = [];
-    selected.push(...shuffledUnseen.slice(0, 10));
-    if (selected.length < 10) {
-      selected.push(...shuffledSeen.slice(0, 10 - selected.length));
-    }
-
-    // Mark as seen
-    selected.forEach(q => this.seenQuestionIds.add(q.id));
-    this.saveHistory();
+    const shuffled = [...rawQuestions].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 10);
 
     // Re-index for UI display (1, 2, 3...)
     return selected.map((q, index) => ({
@@ -57,7 +141,7 @@ export class GeminiService {
     }));
   }
 
-  private generateAnalysisOffline(iq: number, language: LanguageCode, validity: string): Promise<string> {
+  private generateAnalysisOffline(iq: number, language: LanguageCode, validity: string): string {
     const templates: Record<string, { high: string, avg: string, low: string, invalid: string }> = {
       en: {
         high: "Subject demonstrates exceptional pattern recognition and abstract reasoning capabilities. Cognitive processing speed exceeds the 95th percentile, indicating superior fluid intelligence potential.",
@@ -125,22 +209,16 @@ export class GeminiService {
     const getTemplate = (lang: string) => templates[lang] || templates['en'];
     const t = getTemplate(language);
 
-    if (validity.includes('Low')) return Promise.resolve(t.invalid);
-    if (iq >= 120) return Promise.resolve(t.high);
-    if (iq >= 90) return Promise.resolve(t.avg);
-    return Promise.resolve(t.low);
+    if (validity.includes('Low')) return t.invalid;
+    if (iq >= 120) return t.high;
+    if (iq >= 90) return t.avg;
+    return t.low;
   }
 
   private loadHistory() {
     try {
       const stored = localStorage.getItem(this.HISTORY_KEY);
       if (stored) this.seenQuestionIds = new Set(JSON.parse(stored));
-    } catch (e) {}
-  }
-
-  private saveHistory() {
-    try {
-      localStorage.setItem(this.HISTORY_KEY, JSON.stringify(Array.from(this.seenQuestionIds)));
     } catch (e) {}
   }
 
