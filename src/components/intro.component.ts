@@ -107,7 +107,7 @@ import { IconComponent } from './ui/icon.component';
       </div>
       
       <div class="mt-8 text-[10px] text-gray-600 font-mono max-w-sm border-t border-gray-900 pt-4">
-        <p>CAUTION: Adaptive AI in use. Assessments are unique to each session.</p>
+        <p>CAUTION: Assessments are for informational purposes and not a clinical diagnosis.</p>
       </div>
     </div>
   `,

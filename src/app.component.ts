@@ -4,7 +4,7 @@ import { IntroComponent } from './components/intro.component';
 import { QuizComponent } from './components/quiz.component';
 import { PaywallComponent } from './components/paywall.component';
 import { ResultComponent } from './components/result.component';
-import { GeminiService } from './services/gemini.service';
+import { QuizService } from './services/quiz.service';
 import { LanguageService } from './services/language.service';
 import { AppState, Question, UserResult } from './types';
 import { IconComponent } from './components/ui/icon.component';
@@ -111,7 +111,7 @@ import { IconComponent } from './components/ui/icon.component';
                 <p class="text-red-200/80 mb-6 text-sm">{{ uiConfig().errorDesc }}</p>
                 <button (click)="resetApp()"
                    class="inline-block bg-gray-200 text-black px-6 py-3 font-bold font-mono text-sm uppercase tracking-wider rounded-sm hover:bg-white transition-all">
-                  RETRY SYSTEM
+                  {{ uiConfig().errorAction }}
                 </button>
               </div>
             </div>
@@ -178,8 +178,7 @@ import { IconComponent } from './components/ui/icon.component';
 export class AppComponent {
   state = signal<AppState>('intro');
   
-  // Note: Keeping name GeminiService to avoid wide refactor, but it is now offline-only
-  geminiService = inject(GeminiService);
+  quizService = inject(QuizService);
   langService = inject(LanguageService);
   
   uiConfig = computed(() => this.langService.config().ui);
@@ -195,17 +194,13 @@ export class AppComponent {
   async startGeneration() {
     this.state.set('generating');
     try {
-      const q = await this.geminiService.generateTest(this.langService.currentLang());
+      const q = await this.quizService.getTest(this.langService.currentLang());
       this.startTime = Date.now();
       this.questions.set(q);
       this.state.set('test');
-
     } catch (e) {
-      console.error('Generation failed', e);
-      // Fallback to English offline if specific lang fails somehow
-      const q = await this.geminiService.generateTest('en');
-      this.questions.set(q);
-      this.state.set('test');
+      console.error('Test loading failed', e);
+      this.state.set('error');
     }
   }
 
@@ -249,7 +244,7 @@ export class AppComponent {
     estimatedIQ = Math.max(60, Math.min(160, estimatedIQ));
     const percentile = Math.min(99.9, Math.max(0.1, Math.round((estimatedIQ - 100) / 15 * 34 + 50)));
 
-    const summary = await this.geminiService.generateAnalysis(
+    const summary = this.quizService.getAnalysis(
       estimatedIQ, 
       this.langService.currentLang(),
       validity 

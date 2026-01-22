@@ -15,7 +15,7 @@ export class LanguageService {
       ui: {
         start: 'Start Your IQ Capability Test',
         generating: 'Initializing...',
-        generatingTest: 'Generating Unique Assessment...',
+        generatingTest: 'Loading Assessment...',
         question: 'Sequence',
         next: 'Confirm Selection',
         finish: 'Finalize Protocol',
@@ -38,9 +38,9 @@ export class LanguageService {
         iqLabel: 'Estimated IQ',
         restart: 'Restart Assessment',
         exit: 'Abort Test',
-        errorTitle: 'Configuration Error',
-        errorDesc: 'The AI model could not be initialized. Please ensure the API_KEY is correctly set in your deployment environment variables.',
-        errorAction: 'Review Netlify Docs'
+        errorTitle: 'System Error',
+        errorDesc: 'An unexpected error occurred while loading the assessment. Please try again.',
+        errorAction: 'Retry'
       }
     },
     zh: {
@@ -49,7 +49,7 @@ export class LanguageService {
       ui: {
         start: '开始您的智商能力水平测试',
         generating: '正在初始化...',
-        generatingTest: '正在生成独特的评估...',
+        generatingTest: '正在加载评估...',
         question: '序列',
         next: '确认选择',
         finish: '完成评估',
@@ -72,9 +72,9 @@ export class LanguageService {
         iqLabel: '预估智商',
         restart: '重新开始测试',
         exit: '退出测试',
-        errorTitle: '配置错误',
-        errorDesc: 'AI模型无法初始化。请确保您已在部署环境变量中正确设置 API_KEY。',
-        errorAction: '参考Netlify文档'
+        errorTitle: '系统错误',
+        errorDesc: '加载评估时发生意外错误。请重试。',
+        errorAction: '重试'
       }
     },
     es: {
@@ -83,7 +83,7 @@ export class LanguageService {
       ui: {
         start: 'Inicia Tu Resonancia Cognitiva',
         generating: 'Inicializando...',
-        generatingTest: 'Generando Evaluación Única...',
+        generatingTest: 'Cargando Evaluación...',
         question: 'Secuencia',
         next: 'Confirmar Selección',
         finish: 'Finalizar Protocolo',
@@ -106,9 +106,9 @@ export class LanguageService {
         iqLabel: 'CI Estimado',
         restart: 'Reiniciar Evaluación',
         exit: 'Salir',
-        errorTitle: 'Error de Configuración',
-        errorDesc: 'El modelo de IA no pudo inicializarse. Asegúrese de que la API_KEY esté configurada correctamente en sus variables de entorno de implementación.',
-        errorAction: 'Ver Docs de Netlify'
+        errorTitle: 'Error del Sistema',
+        errorDesc: 'Ocurrió un error inesperado al cargar la evaluación. Por favor, inténtelo de nuevo.',
+        errorAction: 'Reintentar'
       }
     },
     fr: {
@@ -117,7 +117,7 @@ export class LanguageService {
       ui: {
         start: 'Commencez Votre Résonance Cognitive',
         generating: 'Initialisation...',
-        generatingTest: 'Génération de l\'évaluation unique...',
+        generatingTest: 'Chargement de l\'évaluation...',
         question: 'Séquence',
         next: 'Confirmer',
         finish: 'Finaliser',
@@ -140,9 +140,9 @@ export class LanguageService {
         iqLabel: 'QI Estimé',
         restart: 'Recommencer le Test',
         exit: 'Quitter',
-        errorTitle: 'Erreur de Configuration',
-        errorDesc: 'Le modèle d\'IA n\'a pas pu être initialisé. Veuillez vous assurer que l\'API_KEY est correctement définie dans vos variables d\'environnement de déploiement.',
-        errorAction: 'Consulter la doc Netlify'
+        errorTitle: 'Erreur Système',
+        errorDesc: 'Une erreur inattendue est survenue lors du chargement de l\'évaluation. Veuillez réessayer.',
+        errorAction: 'Réessayer'
       }
     },
     de: {
@@ -151,7 +151,7 @@ export class LanguageService {
       ui: {
         start: 'Starten Sie Ihre Kognitive Resonanz',
         generating: 'Initialisierung...',
-        generatingTest: 'Einzigartige Bewertung wird erstellt...',
+        generatingTest: 'Bewertung wird geladen...',
         question: 'Sequenz',
         next: 'Bestätigen',
         finish: 'Abschließen',
@@ -174,18 +174,18 @@ export class LanguageService {
         iqLabel: 'Geschätzter IQ',
         restart: 'Test Neustarten',
         exit: 'Abbrechen',
-        errorTitle: 'Konfigurationsfehler',
-        errorDesc: 'Das KI-Modell konnte nicht initialisiert werden. Bitte stellen Sie sicher, dass der API_KEY in Ihren Bereitstellungsumgebungsvariablen korrekt eingestellt ist.',
-        errorAction: 'Netlify-Doks ansehen'
+        errorTitle: 'Systemfehler',
+        errorDesc: 'Beim Laden der Bewertung ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut.',
+        errorAction: 'Wiederholen'
       }
     },
     ja: {
       code: 'ja',
       name: '日本語',
       ui: {
-        start: '認知的共鳴を開始する',
+        start: '认知的共鳴を開始する',
         generating: '初期化中...',
-        generatingTest: '独自の評価を生成中...',
+        generatingTest: '評価を読み込んでいます...',
         question: 'シーケンス',
         next: '選択を確定',
         finish: 'プロトコル完了',
@@ -208,9 +208,9 @@ export class LanguageService {
         iqLabel: '推定IQ',
         restart: 'テストを再開',
         exit: '終了',
-        errorTitle: '設定エラー',
-        errorDesc: 'AIモデルを初期化できませんでした。デプロイ環境変数でAPI_KEYが正しく設定されていることを確認してください。',
-        errorAction: 'Netlifyドキュメント'
+        errorTitle: 'システムエラー',
+        errorDesc: '評価の読み込み中に予期しないエラーが発生しました。もう一度お試しください。',
+        errorAction: '再試行'
       }
     },
     hi: {
@@ -219,7 +219,7 @@ export class LanguageService {
       ui: {
         start: 'अपनी संज्ञानात्मक अनुनाद शुरू करें',
         generating: 'प्रारंभ किया जा रहा है...',
-        generatingTest: 'अद्वितीय मूल्यांकन उत्पन्न हो रहा है...',
+        generatingTest: 'मूल्यांकन लोड हो रहा है...',
         question: 'क्रम',
         next: 'पुष्टि करें',
         finish: 'समाप्त करें',
@@ -242,9 +242,9 @@ export class LanguageService {
         iqLabel: 'अनुमानित आईक्यू',
         restart: 'पुनः आरंभ करें',
         exit: 'बाहर जाएं',
-        errorTitle: 'कॉन्फ़िगरेशन त्रुटि',
-        errorDesc: 'एआई मॉडल को प्रारंभ नहीं किया जा सका। कृपया सुनिश्चित करें कि आपके परिनियोजन परिवेश चर में API_KEY सही ढंग से सेट है।',
-        errorAction: 'नेटलिफाई दस्तावेज़ देखें'
+        errorTitle: 'सिस्टम त्रुटि',
+        errorDesc: 'मूल्यांकन लोड करते समय एक अप्रत्याशित त्रुटि हुई। कृपया पुन: प्रयास करें।',
+        errorAction: 'पुनः प्रयास करें'
       }
     },
     ar: {
@@ -253,7 +253,7 @@ export class LanguageService {
       ui: {
         start: 'ابدأ رنينك المعرفي',
         generating: 'جاري البدء...',
-        generatingTest: 'جاري إنشاء تقييم فريد...',
+        generatingTest: 'جاري تحميل التقييم...',
         question: 'تسلسل',
         next: 'تأكيد',
         finish: 'إنهاء',
@@ -276,9 +276,9 @@ export class LanguageService {
         iqLabel: 'معدل الذكاء التقديري',
         restart: 'إعادة الاختبار',
         exit: 'خروج',
-        errorTitle: 'خطأ في التكوين',
-        errorDesc: 'تعذر تهيئة نموذج الذكاء الاصطناعي. يرجى التأكد من تعيين API_KEY بشكل صحيح في متغيرات بيئة النشر الخاصة بك.',
-        errorAction: 'مراجعة مستندات Netlify'
+        errorTitle: 'خطأ في النظام',
+        errorDesc: 'حدث خطأ غير متوقع أثناء تحميل التقييم. يرجى المحاولة مرة أخرى.',
+        errorAction: 'إعادة المحاولة'
       }
     },
     pt: {
@@ -287,7 +287,7 @@ export class LanguageService {
       ui: {
         start: 'Inicie Sua Ressonância Cognitiva',
         generating: 'Inicializando...',
-        generatingTest: 'Gerando Avaliação Única...',
+        generatingTest: 'Carregando Avaliação...',
         question: 'Sequência',
         next: 'Confirmar',
         finish: 'Finalizar',
@@ -310,9 +310,9 @@ export class LanguageService {
         iqLabel: 'QI Estimado',
         restart: 'Reiniciar Teste',
         exit: 'Sair',
-        errorTitle: 'Erro de Configuração',
-        errorDesc: 'O modelo de IA não pôde ser inicializado. Certifique-se de que a API_KEY está definida corretamente em suas variáveis de ambiente de implantação.',
-        errorAction: 'Ver Docs da Netlify'
+        errorTitle: 'Erro de Sistema',
+        errorDesc: 'Ocorreu um erro inesperado ao carregar a avaliação. Por favor, tente novamente.',
+        errorAction: 'Tentar Novamente'
       }
     },
     ru: {
@@ -321,7 +321,7 @@ export class LanguageService {
       ui: {
         start: 'Начать Когнитивный Резонанс',
         generating: 'Инициализация...',
-        generatingTest: 'Создание уникальной оценки...',
+        generatingTest: 'Загрузка оценки...',
         question: 'Последовательность',
         next: 'Подтвердить',
         finish: 'Завершить',
@@ -344,9 +344,9 @@ export class LanguageService {
         iqLabel: 'Оценка IQ',
         restart: 'Перезапустить',
         exit: 'Выход',
-        errorTitle: 'Ошибка конфигурации',
-        errorDesc: 'Не удалось инициализировать модель ИИ. Убедитесь, что API_KEY правильно установлен в переменных окружения вашего развертывания.',
-        errorAction: 'См. документацию Netlify'
+        errorTitle: 'Системная ошибка',
+        errorDesc: 'При загрузке оценки произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз.',
+        errorAction: 'Повторить'
       }
     }
   };
